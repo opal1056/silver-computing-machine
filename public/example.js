@@ -1,8 +1,11 @@
-const connection = new BareMux.BareMuxConnection("/baremux/worker.js")
-const wispUrl = (location.protocol === "https:" ? "wss" : "ws") + "://" + location.host + "/wisp/";
-const bareUrl = (location.protocol === "https:" ? "https" : "http") + "://" + location.host + "/bare/"
-document // makes it so you can press enter to submit as opposed to just being able to press a button
-    .getElementById("urlInput")
+const connection = new BareMux.BareMuxConnection("/baremux/worker.js");
+
+// Define server URLs based on the protocol
+const wispUrl = (location.protocol === "https:" ? "wss" : "ws") + "://" + "ruby.rubynetwork.co" + "/wisp/";
+const bareUrl = (location.protocol === "https:" ? "https" : "http") + "://" + "ruby.rubynetwork.co" + "/bare/";
+
+// Handle Enter key press in the URL input field
+document.getElementById("urlInput")
     .addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
             event.preventDefault();
@@ -13,29 +16,43 @@ document // makes it so you can press enter to submit as opposed to just being a
 document.getElementById("searchButton").onclick = async function (event) {
     event.preventDefault();
 
-    let url = document.getElementById("urlInput").value; // if no periods are detected in the input, search google instead
+    let url = document.getElementById("urlInput").value;
     let searchUrl = "https://www.google.com/search?q=";
 
+    // If no periods are detected in the input, perform a Google search
     if (!url.includes(".")) {
         url = searchUrl + encodeURIComponent(url);
     } else {
-        if (!url.startsWith("http://") && !url.startsWith("https://")) { // if no http or https is detected, add https automatically
+        // If no http or https is detected, add https automatically
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
             url = "https://" + url;
         }
     }
-	if (!await connection.getTransport()) {
-		await connection.setTransport("/epoxy/index.mjs", [{ wisp: wispUrl }]);
-	}
-    iframeWindow.src = __uv$config.prefix + __uv$config.encodeUrl(url);
+
+    try {
+        // Check if transport is set; if not, set it
+        if (!await connection.getTransport()) {
+            await connection.setTransport("/epoxy/index.mjs", [{ wisp: wispUrl }]);
+        }
+        // Set the iframe source to the encoded URL
+        iframeWindow.src = __uv$config.prefix + __uv$config.encodeUrl(url);
+    } catch (error) {
+        console.error("Error setting transport or loading URL:", error);
+    }
 };
 
-document.getElementById("switcher").onselect = async function (event) {
-    switch (event.target.value) {
-        case "epoxy":
-            await connection.setTransport("/epoxy/index.mjs", [{ wisp: wispUrl }]);
-            break;
-        case "bare":
-            await connection.setTransport("/baremod/index.mjs", [bareUrl]);
-            break;
+// Handle transport switching
+document.getElementById("switcher").onchange = async function (event) {
+    try {
+        switch (event.target.value) {
+            case "epoxy":
+                await connection.setTransport("/epoxy/index.mjs", [{ wisp: wispUrl }]);
+                break;
+            case "bare":
+                await connection.setTransport("/baremod/index.mjs", [bareUrl]);
+                break;
+        }
+    } catch (error) {
+        console.error("Error switching transport:", error);
     }
-}
+};

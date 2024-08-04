@@ -1,46 +1,71 @@
-.iframeWindow {
-    position: absolute;
-    width: 100vw;
-    height: 90vh;
-    border: 0;
-    padding: 0;
+body {
     margin: 0;
-    left: 0;
-    bottom: 0;
-    background-color: #141414;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1c1c1c;
+    overflow: hidden;
+    position: relative;
+    color: white;
+}
+
+.container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.heading {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #d3d3d3;
+    color: #1c1c1c;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
 }
 
 #urlInput {
-    position: absolute;
-    padding: 0em;
+    padding: 0;
     padding-left: 0.5em;
-    margin: 0;
-    left: 0;
-    top: 0;
     width: 80vw;
     height: 10vh;
     border: 0;
     outline: 0;
-    color: aliceblue;
-    background-color: #25252a;
+    color: white;
+    background-color: #1d1d1d;
     font-size: 5vh;
+    border-radius: 8px;
+    margin-bottom: 10px;
 }
 
 #searchButton {
-    position: absolute;
-    margin: 0;
-    right: 0;
-    top: 0;
     width: 20vw;
     height: 10vh;
     border: 0;
     outline: 0;
-    color: #141414;
+    color: #1c1c1c;
     background-color: aliceblue;
     font-size: 5vh;
+    border-radius: 8px;
+    margin-bottom: 10px;
 }
 
-#switcher {
+#iframeWindow {
     position: absolute;
-    z-index: 999;
+    width: 100vw;
+    height: 100vh;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    left: 0;
+    top: 0;
+    background-color: #141414;
+    z-index: 0;
 }
